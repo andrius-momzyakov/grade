@@ -1,0 +1,59 @@
+from django.contrib import admin
+
+# Register your models here.
+
+from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+
+from .models import IndexPage, Category, Segment, Worker, Project, JobCategory, Job, ProjectPhoto
+
+class WysiwygAdmin(admin.ModelAdmin):
+
+    class Meta:
+        wysiwyg_fields = ('description',)
+
+    #class Media:
+    #    js = ('%stiny_mce/tiny_mce.js' % settings.STATIC_URL,
+    #          '%sjs/wysiwyg.js' % settings.STATIC_URL,)
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        field = super(WysiwygAdmin, self).formfield_for_dbfield(db_field, **kwargs)
+        if db_field.name in self.Meta.wysiwyg_fields:
+            # field.widget.attrs['class'] = 'wysiwyg %s' % field.widget.attrs.get('class', '')
+            #field.widget = TinyMCE(attrs={'cols': 100, 'rows': 20})
+            field.widget = CKEditorUploadingWidget()  # CKEditorWidget()
+        return field
+
+class ProjectPhotoAdmin(admin.TabularInline):
+    model = ProjectPhoto
+
+
+class ProjectAdmin(WysiwygAdmin):
+    model = Project
+    inlines = [ProjectPhotoAdmin]
+
+admin.site.register(Project, ProjectAdmin)
+
+class IndexPageAdmin(WysiwygAdmin):
+    model = IndexPage
+
+admin.site.register(IndexPage, IndexPageAdmin)
+
+admin.site.register(Category)
+admin.site.register(Segment)
+
+class WorkerAdmin(WysiwygAdmin):
+    model = Worker
+
+admin.site.register(Worker, WorkerAdmin)
+
+class JobCategoryAdmin(WysiwygAdmin):
+    model = JobCategory
+
+admin.site.register(JobCategory, JobCategoryAdmin)
+
+class JobAdmin(WysiwygAdmin):
+    model = Job
+
+admin.site.register(Job, JobAdmin)
+
