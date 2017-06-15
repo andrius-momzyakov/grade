@@ -123,4 +123,6 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+INDEXPAGE_CODE = 'INDEX'
+
 from .local_settings import *

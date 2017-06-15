@@ -1,0 +1,26 @@
+.top_menu {
+    list-style-type: none;
+}
+
+.top_menu li{
+    display: inline;
+}
+
+.top_menu li a {
+    padding: 20px;
+    font-size: 20px;
+    font-family: sans-serif;
+    color: #444;
+    text-decoration: none;
+}
+
+.top_menu li a:hover {
+    color: white;
+    background-color: LightBlue;
+}
+
+.top_menu .active {
+    color: white;
+    background-color: LightBlue;
+
+}

@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from web import views
 from ckeditor_uploader import urls as ck_urls
 
 urlpatterns = [
+    url(r'^$', views.Index.as_view(), name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^ckeditor/', include(ck_urls)),
 

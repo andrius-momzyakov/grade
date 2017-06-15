@@ -10,7 +10,7 @@ from .models import IndexPage, Category, Segment, Worker, Project, JobCategory, 
 class WysiwygAdmin(admin.ModelAdmin):
 
     class Meta:
-        wysiwyg_fields = ('description',)
+        wysiwyg_fields = ('description', 'body')
 
     #class Media:
     #    js = ('%stiny_mce/tiny_mce.js' % settings.STATIC_URL,
