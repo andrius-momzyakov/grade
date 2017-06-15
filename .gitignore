@@ -1,2 +1,6 @@
-idea/
+grade/idea/
 *.pyc
+Будет удалено .idea/
+Будет удалено grade/local_settings.py
+Будет удалено web/__pycache__/
+Будет удалено web/migrations/__pycache__/
