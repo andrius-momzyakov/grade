@@ -5,7 +5,8 @@ from django.contrib import admin
 from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from .models import IndexPage, Category, Segment, Worker, Project, JobCategory, Job, ProjectPhoto
+from .models import IndexPage, Category, Segment, Worker, Project, JobCategory, Job, ProjectPhoto, \
+                    Contact, ContactPhone, ContactEmail
 
 class WysiwygAdmin(admin.ModelAdmin):
 
@@ -57,3 +58,14 @@ class JobAdmin(WysiwygAdmin):
 
 admin.site.register(Job, JobAdmin)
 
+class ContactPhoneAdmin(admin.TabularInline):
+    model = ContactPhone
+
+class ContactEmailAdmin(admin.TabularInline):
+    model = ContactEmail
+
+class ContactAdmin(admin.ModelAdmin):
+    model = Contact
+    inlines = [ContactPhoneAdmin, ContactEmailAdmin]
+
+admin.site.register(Contact, ContactAdmin)

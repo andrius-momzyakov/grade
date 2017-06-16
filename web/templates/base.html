@@ -15,16 +15,30 @@
         });
     });
 </script>
-{% block menu%}
+<div class="back">
+<div class="header">
+    <h1>Строительные и ремонтные работы любой сложности <br/>{{ header_phone }}</h1>
+</div>
+<div class="no-back">
+<nav style="text-align: center; padding-top: 20px;">
 <ul class="top_menu">
     <li><a href="/products/" id="m_prod">Работы и услуги</a></li>
     <li><a href="/portfolio/" id="m_port">Портфолио</a></li>
     <li><a href="/workers/" id="m_work">Мастера</a></li>
     <li><a href="/pricelist/" id="m_pric">Расценки</a></li>
 </ul>
-{% endblock%}
+</nav>
+<div class="content">
 {% block content %}
-{{ content.body|safe }}
 {% endblock %}
+</div>
+</div>
+<div class="footer">
+    <footer style="padding-top: 20px;">
+        <p style="margin-left: 25%; text-align: center; width:50%; display: inline;">&copy; Раде Грдан 2017 год</p>
+        <a style="margin-left: 25%; text-align: center; width: 50%; display: inline;" href="mailto:{{ header_email }}">Написать</a>
+    </footer>
+</div>
+</div>
 </body>
 </html>

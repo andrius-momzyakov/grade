@@ -107,3 +107,38 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name + ' ' + self.surname
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Имя', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Контакт'
+        verbose_name_plural = 'Контакты'
+
+    def __str__(self):
+        return self.name
+
+
+class ContactPhone(models.Model):
+    phone = models.CharField(max_length=30, verbose_name='Телефон:')
+    contact = models.ForeignKey(Contact, verbose_name='Контакт')
+
+    class Meta:
+        verbose_name = 'Телефон'
+        verbose_name_plural = 'Телефоны'
+
+    def __str__(self):
+        return self.contact.name + ' -> ' + self.phone
+
+
+class ContactEmail(models.Model):
+    email = models.EmailField(max_length=50, verbose_name='Электронная почта для связи')
+    contact = models.ForeignKey(Contact, verbose_name='Контакт')
+
+    class Meta:
+        verbose_name = 'Email'
+        verbose_name_plural = 'Emails'
+
+    def __str__(self):
+        return self.contact.name + ' -> ' + self.email
