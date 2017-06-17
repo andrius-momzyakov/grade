@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content%}
+{{ project.description|safe }}
+<div >
+    {% for photo in project.projectphoto_set.all %}
+    <a href="{{ photo.image.url}}"><img src="{{ photo.get_preview_url }}"></a>
+    {% endfor %}
+</div>
+{% endblock %}

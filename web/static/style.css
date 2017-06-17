@@ -5,7 +5,7 @@ html,body {
 
 .top_menu {
     list-style-type: none;
-    width: 800px;
+    width: 1000px;
     margin: 0 auto;
 }
 
@@ -53,13 +53,13 @@ html,body {
 
 .no-back {
     background-color: white;
-    width: 900px;
+    width: 1000px;
     margin: auto;
     min-height: 100%;
 }
 
 .content {
-    width: 800px;
+    width: 900px;
     padding: 50px;
     /*text-align: center;*/
     margin: 0 auto;

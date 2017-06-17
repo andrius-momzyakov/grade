@@ -1,6 +1,107 @@
+import os
+import urllib
+import math
+from PIL import Image
+from django.conf import settings
 from django.db import models
 
+
 # Create your models here.
+
+class PhotoModel(models.Model):
+
+    def gen_preview(self, type, custom_upload_to=''):
+        """
+
+        :param type: 'main' or 'preview' or 'thumbnail'
+        :return:
+        """
+        base_image_dir, fname = os.path.split(self.image.url)
+        os_full_path = os.path.join(settings.MEDIA_ROOT, custom_upload_to, urllib.parse.unquote(fname))
+        base_image_dir, fname = os.path.split(os_full_path)
+        # base_image_dir = os.path.dirname(base_image_dir)
+
+        print('MEDIA_ROOT = "{}"'.format(settings.MEDIA_ROOT))
+        print('image_url = "{}"'.format(self.image.url))
+        print('base_image_dir = "{}"'.format(base_image_dir))
+        print('full_path = {}'.format(os_full_path))
+
+        width = 600
+        preview_path = '/main/'
+        if type == 'main':
+            if hasattr(self.__class__, 'main_width'):
+                width = self.__class__.main_width
+            else:
+                width = 600
+            preview_path = '/main/'
+        elif type == 'preview':
+            if hasattr(self.__class__, 'preview_width'):
+                width = self.__class__.preview_width
+            else:
+                width = 200
+            preview_path = '/preview/'
+        elif type == 'thumbnail':
+            if hasattr(self.__class__, 'thumbnail_width'):
+                width = self.__class__.thumbnail_width
+            else:
+                width = 100
+            preview_path = '/thumbnails/'
+
+        try:
+            with Image.open(open(os_full_path, 'r+b')) as image:
+                original_width = image.width
+                original_height = image.height
+                original_ratio = original_width / original_height
+                height_byratio = round(width / original_ratio)
+        except FileNotFoundError:
+            print('ERROR: Can\'t open original: {}'.format(
+                os_full_path))
+            return
+
+        try:
+            with open(os_full_path, 'r+b') as f:
+                with Image.open(f) as image:
+                    cover = image.resize((width, height_byratio), Image.ANTIALIAS)
+                    cover.save(base_image_dir + preview_path + fname, image.format)
+        except FileNotFoundError:
+            print('ERROR: Can\'t save preview: {}'.format(base_image_dir + '/main/' + fname))
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if hasattr(self.__class__, 'custom_upload_to'):
+            part1, fname = os.path.split(self.image.name)
+            new_name = os.path.join(settings.MEDIA_ROOT, self.__class__.custom_upload_to, fname)
+            old_name = os.path.join(settings.MEDIA_ROOT, self.image.name)
+            try:
+                os.rename(old_name, new_name)
+                self.gen_previews(custom_upload_to=self.__class__.custom_upload_to)
+                return
+            except OSError:
+                print('OS error occured while renaming {} to {}'.format(old_name, new_name))
+                print('File haven\'t been moved, previews haven\'t been generated.')
+                return
+        self.gen_preview('main')
+        self.gen_preview('preview')
+        self.gen_preview('thumbnail')
+
+    def get_preview_url(self):
+        base_image_dir, fname = os.path.split(self.image.url)
+        return base_image_dir + '/preview/' + fname
+
+    def get_thumbnail_url(self):
+        base_image_dir, fname = os.path.split(self.image.url)
+        return base_image_dir + '/thumbnails/' + fname
+
+    def get_main_url(self):
+        base_image_dir, fname = os.path.split(self.image.url)
+        return base_image_dir + '/main/' + fname
+
+    def get_original_url(self):
+        return self.image.url
+
+    class Meta:
+        abstract = True
+
 
 class IndexPage(models.Model):
     code = models.CharField(max_length=100, verbose_name='Мнемокод для представления (уникальный)', unique=True)
@@ -49,10 +150,13 @@ class Project(models.Model):
         verbose_name_plural = 'Объекты для портфолио'
 
     def __str__(self):
-        return self.code + ' -> ' + self.title
+        return self.code + ' -> ' + str(self.title)
+
+    def get_url(self):
+        return '/project/{}'.format(self.id)
 
 
-class ProjectPhoto(models.Model):
+class ProjectPhoto(PhotoModel):
     project = models.ForeignKey(Project, verbose_name='Объект')
     image = models.ImageField(verbose_name='Фото')
     alt_text = models.CharField(max_length=50, verbose_name='Альт. текст', null=True, blank=True)
@@ -62,7 +166,7 @@ class ProjectPhoto(models.Model):
         verbose_name_plural = 'Фото объекта'
 
     def __str__(self):
-        return self.project + ' -> ' + self.image.name
+        return self.project.code + ' -> ' + self.image.name
 
 
 class JobCategory(models.Model):

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content%}
+{% for contact in contacts %}
+<table width="100%">
+    <caption><h2>{{ contact.name }}</h2></caption>
+
+    {% if contact.contactphone_set.all %}
+        <tr><th colspan="2">Телефоны для связи</th></tr>
+    {% endif %}
+    {% for phone in contact.contactphone_set.all %}
+        <tr>
+            <th>Телефон</th><td>{{ phone.phone }}</td>
+        </tr>
+    {% endfor %}
+
+    {% if contact.contactemail_set.all %}
+        <tr><th colspan="2">E-mail для связи</th></tr>
+    {% endif %}
+    {% for email in contact.contactemail_set.all %}
+        <tr>
+            <th>E-mail</th><td>{{ email.email }}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+{% endfor %}
+<div >
+    {% for photo in project.projectphoto_set.all %}
+    <a href="{{ photo.image.url}}"><img src="{{ photo.get_preview_url }}"></a>
+    {% endfor %}
+</div>
+{% endblock %}
