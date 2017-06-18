@@ -146,8 +146,8 @@ class Project(models.Model):
     categories = models.ManyToManyField(Category, verbose_name='Категории')
 
     class Meta:
-        verbose_name = 'Объект для портфолио'
-        verbose_name_plural = 'Объекты для портфолио'
+        verbose_name = 'Объект'
+        verbose_name_plural = 'Объекты'
 
     def __str__(self):
         return self.code + ' -> ' + str(self.title)
