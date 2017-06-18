@@ -19,7 +19,7 @@
 {% endblock %}
 {% block content%}
 {% for contact in contacts %}
-<table width="100%">
+<table width="100%" style="padding-bottom: 20px">
     <caption><h2>{{ contact.name }}</h2></caption>
 
     {% if contact.contactphone_set.all %}
