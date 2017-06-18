@@ -60,7 +60,7 @@ html,body {
 
 .content {
     width: 900px;
-    padding: 50px;
+    padding: 0px 50px;
     /*text-align: center;*/
     margin: 0 auto;
 }
@@ -73,4 +73,8 @@ html,body {
     font-family: sans-serif;
     text-decoration: none;
     font-size: 18px;
+}
+
+.bottom-preview {
+    vertical-align: middle;
 }

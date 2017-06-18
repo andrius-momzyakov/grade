@@ -38,7 +38,7 @@ class Index(View):
         cnt = ProjectPhoto.objects.count()
         photos = []
         rownums = []
-        limit=3
+        limit=12
         if cnt < limit:
             limit = cnt
         for i in range(limit):
@@ -47,7 +47,6 @@ class Index(View):
                 if rn in rownums:
                     continue
                 rownums.append(rn)
-                print(rn)
                 photos.append(ProjectPhoto.objects.all()[rn])
                 break
         print(photos)

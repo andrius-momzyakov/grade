@@ -160,6 +160,7 @@ class ProjectPhoto(PhotoModel):
     project = models.ForeignKey(Project, verbose_name='Объект')
     image = models.ImageField(verbose_name='Фото')
     alt_text = models.CharField(max_length=50, verbose_name='Альт. текст', null=True, blank=True)
+    is_thumb = models.BooleanField(verbose_name='Использовать как иконку', default=False)
 
     class Meta:
         verbose_name = 'Фото объекта'
@@ -225,6 +226,7 @@ class Contact(models.Model):
 
 
 class ContactPhone(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Наименование телефона', null=True, blank=True)
     phone = models.CharField(max_length=30, verbose_name='Телефон:')
     contact = models.ForeignKey(Contact, verbose_name='Контакт')
 
@@ -237,6 +239,7 @@ class ContactPhone(models.Model):
 
 
 class ContactEmail(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Наименование адреса', null=True, blank=True)
     email = models.EmailField(max_length=50, verbose_name='Электронная почта для связи')
     contact = models.ForeignKey(Contact, verbose_name='Контакт')
 

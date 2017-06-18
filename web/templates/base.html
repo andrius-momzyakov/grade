@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
+<head>{% block head %}
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/jquery-3.2.1.js"></script>
     <title>{{ title }}</title>
+    {% endblock%}
 </head>
 <body>
 <script>
@@ -24,12 +25,13 @@
 <ul class="top_menu">
     <li><a href="/products/" id="m_prod">Работы и услуги</a></li>
     <li><a href="/portfolio/" id="m_port">Портфолио</a></li>
-    <li><a href="/workers/" id="m_work">Мастера</a></li>
-    <li><a href="/pricelist/" id="m_pric">Расценки</a></li>
+    <li><a href="/" id="m_work">Наши мастера</a></li>
+    <li><a href="/" id="m_pric">Расценки</a></li>
     <li ><a href="/contact/" id="m_cont">Контакты</a></li>
 </ul>
 </nav>
 <div class="content">
+    <hr style="margin-top:20px;">
 {% block content %}
 {% endblock %}
 </div>
