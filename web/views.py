@@ -32,6 +32,7 @@ class Index(View):
     def get(self, request, *args, **kwargs):
         contact_info = get_base_contact()
         # return HttpResponse(contact_info['header_email'])
+
         content = IndexPage.objects.get(code=settings.INDEXPAGE_CODE)
         context = {'content': content}
         context.update(contact_info)
@@ -56,10 +57,12 @@ class Index(View):
 
 
 class Products(View):
-
     def get(self, request, *args, **kwargs):
-        qs = JobCategory.objects.all()
-        return HttpResponse('Products page')
+        contact_info = get_base_contact()
+        content = IndexPage.objects.get(code=settings.PRODUCTS_CODE)
+        context = {'content': content}
+        context.update(contact_info)
+        return render(request, 'products.html', context=context)
 
 
 class ProjectView(View):

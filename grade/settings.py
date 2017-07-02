@@ -124,5 +124,6 @@ CKEDITOR_CONFIGS = {
 }
 
 INDEXPAGE_CODE = 'INDEX'
+PRODUCTS_CODE = 'PRODUCTS'
 
 from .local_settings import *
