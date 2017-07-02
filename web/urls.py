@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^$', views.Index.as_view(), name='index'),
     url(r'^products/$', views.Products.as_view(), name='products'),
     url(r'^project/(?P<id>\w+)$', views.ProjectView.as_view(), name='project'),
-    url(r'^contact/$', views.ContactView.as_view(), name='contact')
+    url(r'^contact/$', views.ContactView.as_view(), name='contact'),
+    url(r'^portfolio/', views.ProjectListView.as_view(), name='project_list')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

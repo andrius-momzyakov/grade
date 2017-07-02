@@ -27,6 +27,7 @@ class WysiwygAdmin(admin.ModelAdmin):
 
 class ProjectPhotoAdmin(admin.TabularInline):
     model = ProjectPhoto
+    extra = 0
 
 
 class ProjectAdmin(WysiwygAdmin):

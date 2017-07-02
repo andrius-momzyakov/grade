@@ -8,6 +8,7 @@ from .models import IndexPage, Contact, JobCategory, ProjectPhoto, Project
 
 # Create your views here.
 
+
 def get_base_contact():
     try:
         contact = Contact.objects.all()[0]
@@ -69,6 +70,17 @@ class ProjectView(View):
         context = {'project': obj}
         context.update(contact_info)
         return render(request, 'Project.html', context=context)
+
+class ProjectListView(View):
+
+    def get(self, request, *args, **kwargs):
+        contact_info = get_base_contact()
+        list_content = Project.objects.all()
+        context = {'list': list_content}
+        context.update(contact_info)
+        return render(request, 'Projects.html', context=context)
+
+
 
 class ContactView(View):
     def get(self, request, *args, **kwargs):

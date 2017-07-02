@@ -49,6 +49,7 @@ html,body {
     background-image: url(/static/34-fon-dlya-sayta.png);
     background-size: 10%;
     min-height: 100%;
+    overflow: hidden;
 }
 
 .no-back {
@@ -63,6 +64,8 @@ html,body {
     padding: 0px 50px;
     /*text-align: center;*/
     margin: 0 auto;
+    overflow: hidden;
+    min-height: 600px;
 }
 
 .footer {
@@ -77,4 +80,23 @@ html,body {
 
 .bottom-preview {
     vertical-align: middle;
+}
+
+.object_list_item {
+    float: left;
+    width: 220px;
+    position: relative;
+    /*display: block;*/
+
+}
+
+.object_list_item h1 {
+    font-size: 16px;
+}
+
+.object_list_item p {
+    font-size: 12px;
+    font-family: sans-serif;
+    padding: 5px;
+    color: grey;
 }

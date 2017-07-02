@@ -142,6 +142,9 @@ class Segment(models.Model):
 class Project(models.Model):
     code = models.CharField(max_length=100, verbose_name='Мнемокод для представления (уникальный)', unique=True)
     title = models.CharField(max_length=250, verbose_name='Заголовок страницы', null=True, blank=True)
+    short_description = models.TextField(verbose_name='Краткое описание для списков (до 140 симв.)', max_length=140,
+                                         null=True,
+                                         blank=True)
     description = models.TextField(verbose_name='Содержание страницы')
     categories = models.ManyToManyField(Category, verbose_name='Категории')
 
@@ -155,12 +158,27 @@ class Project(models.Model):
     def get_url(self):
         return '/project/{}'.format(self.id)
 
+    def get_thumbnail_url(self):
+        prev = ProjectPhoto.objects.filter(project=self, is_thumb=True)
+        if prev.count() > 0:
+            return prev[0].get_thumbnail_url()
+        else:
+            return None
+
+    def get_preview_url(self):
+        prev = ProjectPhoto.objects.filter(project=self, is_thumb=True)
+        if prev.count() > 0:
+            return prev[0].get_preview_url()
+        else:
+            return None
+
 
 class ProjectPhoto(PhotoModel):
     project = models.ForeignKey(Project, verbose_name='Объект')
     image = models.ImageField(verbose_name='Фото')
     alt_text = models.CharField(max_length=50, verbose_name='Альт. текст', null=True, blank=True)
-    is_thumb = models.BooleanField(verbose_name='Использовать как иконку', default=False)
+    is_thumb = models.BooleanField(verbose_name='Использовать как иконку объекта', default=False)
+    #is_preview = models.BooleanField(verbose_name='Использовать как превью объекта', default=False)
 
     class Meta:
         verbose_name = 'Фото объекта'
