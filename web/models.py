@@ -249,6 +249,9 @@ class ContactPerson(models.Model):
     name = models.CharField(max_length=100, verbose_name='ФИО (Если не указан логин)', null=True, blank=True)
     photo = models.ImageField(verbose_name='Фото', null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class ContactPhone(models.Model):
     person = models.ForeignKey(ContactPerson, verbose_name='Контактное лицо', null=True, blank=True)
