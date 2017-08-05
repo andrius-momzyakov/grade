@@ -129,6 +129,7 @@ PRODUCTS_CODE = 'PRODUCTS'
 STATICFILES_DIRS = [
     # ...
     ("admin", "www/static/admin"),
+    ("", 'www/static'),
 ]
 
 
