@@ -4,27 +4,21 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, View
 from django.conf import settings
-from .models import IndexPage, Contact, JobCategory, ProjectPhoto, Project
+from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project
 
 # Create your views here.
 
 
 def get_base_contact():
     try:
-        contact = Contact.objects.all()[0]
+        phone = ', '.join([cp.phone for cp in ContactPhone.objects.filter(place_on_header=True)])
     except IndexError:
-        contact = None
-    if contact:
-        try:
-            phone = contact.contactphone_set.all()[0].phone
-        except IndexError:
-            phone = None
-        try:
-            email = contact.contactemail_set.all()[0].email
-        except IndexError:
-            email = None
-        return {'header_phone': phone, 'header_email': email}
-    return {}
+        phone = None
+    try:
+        email = ', '.join([cp.email for cp in ContactEmail.objects.filter(place_on_header=True)])
+    except:
+        email = None
+    return {'header_phone': phone, 'header_email': email}
 
 
 class Index(View):
@@ -87,7 +81,7 @@ class ProjectListView(View):
 
 class ContactView(View):
     def get(self, request, *args, **kwargs):
-        qs = Contact.objects.all()
+        qs = ContactPerson.objects.all()
         contact_info = get_base_contact()
         context = {'contacts': qs}
         context.update(contact_info)

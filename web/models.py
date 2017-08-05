@@ -4,6 +4,7 @@ import math
 from PIL import Image
 from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -243,23 +244,31 @@ class Contact(models.Model):
         return self.name
 
 
+class ContactPerson(models.Model):
+    user = models.ForeignKey(User, verbose_name='Логин', null=True, blank=True)
+    name = models.CharField(max_length=100, verbose_name='ФИО (Если не указан логин)', null=True, blank=True)
+    photo = models.ImageField(verbose_name='Фото', null=True, blank=True)
+
+
 class ContactPhone(models.Model):
+    person = models.ForeignKey(ContactPerson, verbose_name='Контактное лицо', null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name='Наименование телефона', null=True, blank=True)
     phone = models.CharField(max_length=30, verbose_name='Телефон:')
-    contact = models.ForeignKey(Contact, verbose_name='Контакт')
+    place_on_header = models.BooleanField(verbose_name='Размещать в заголовке', default=False)
 
     class Meta:
         verbose_name = 'Телефон'
         verbose_name_plural = 'Телефоны'
 
     def __str__(self):
-        return self.contact.name + ' -> ' + self.phone
+        return self.person.name + ' -> ' + self.phone
 
 
 class ContactEmail(models.Model):
+    person = models.ForeignKey(ContactPerson, verbose_name='Контактное лицо', null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name='Наименование адреса', null=True, blank=True)
     email = models.EmailField(max_length=50, verbose_name='Электронная почта для связи')
-    contact = models.ForeignKey(Contact, verbose_name='Контакт')
+    place_on_header = models.BooleanField(verbose_name='Размещать в заголовке', default=False)
 
     class Meta:
         verbose_name = 'Email'

@@ -126,4 +126,10 @@ CKEDITOR_CONFIGS = {
 INDEXPAGE_CODE = 'INDEX'
 PRODUCTS_CODE = 'PRODUCTS'
 
+STATICFILES_DIRS = [
+    # ...
+    ("admin", "www/static/admin"),
+]
+
+
 from .local_settings import *
