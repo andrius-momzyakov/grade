@@ -275,4 +275,4 @@ class ContactEmail(models.Model):
         verbose_name_plural = 'Emails'
 
     def __str__(self):
-        return self.contact.name + ' -> ' + self.email
+        return self.person.name + ' -> ' + self.email
