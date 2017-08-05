@@ -80,6 +80,7 @@ class ProjectListView(View):
 
 
 class ContactView(View):
+
     def get(self, request, *args, **kwargs):
         qs = ContactPerson.objects.all()
         contact_info = get_base_contact()

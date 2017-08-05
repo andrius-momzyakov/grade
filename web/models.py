@@ -233,21 +233,16 @@ class Worker(models.Model):
         return self.name + ' ' + self.surname
 
 
-class Contact(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Имя', null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'Контакт'
-        verbose_name_plural = 'Контакты'
-
-    def __str__(self):
-        return self.name
-
-
 class ContactPerson(models.Model):
     user = models.ForeignKey(User, verbose_name='Логин', null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name='ФИО (Если не указан логин)', null=True, blank=True)
     photo = models.ImageField(verbose_name='Фото', null=True, blank=True)
+    order = models.IntegerField(verbose_name='Вес для сортировки по убыванию', default=-1)
+
+    class Meta:
+        verbose_name = 'Контактное лицо'
+        verbose_name_plural = 'Контактные лица'
+        ordering = ['-order',]
 
     def __str__(self):
         return self.name
