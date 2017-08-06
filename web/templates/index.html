@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content%}
-{{ content.body|safe }}
-<hr style="margin: 10px 0 10px;">
 <div>
+{{ content.body|safe }}
+    </div>
+<hr style="margin: 10px 0 10px;">
+<div style="clear: both;">
     {% for image in photos %}
     <a href="{{ image.project.get_url }}"><img style="vertical-align: middle; padding:5px;" src="{{ image.get_preview_url }}"></a>
     {% endfor %}
