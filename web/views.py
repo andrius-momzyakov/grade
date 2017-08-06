@@ -3,6 +3,8 @@ import random
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project
 
@@ -50,7 +52,9 @@ class Index(View):
         return render(request, 'index.html', context=context)
 
 
+@method_decorator(login_required, name='dispatch')
 class Products(View):
+
     def get(self, request, *args, **kwargs):
         contact_info = get_base_contact()
         content = IndexPage.objects.get(code=settings.PRODUCTS_CODE)
@@ -59,6 +63,7 @@ class Products(View):
         return render(request, 'products.html', context=context)
 
 
+@method_decorator(login_required, name='dispatch')
 class ProjectView(View):
 
     def get(self, request, id, *args, **kwargs):
@@ -68,6 +73,7 @@ class ProjectView(View):
         context.update(contact_info)
         return render(request, 'Project.html', context=context)
 
+@method_decorator(login_required, name='dispatch')
 class ProjectListView(View):
 
     def get(self, request, *args, **kwargs):
