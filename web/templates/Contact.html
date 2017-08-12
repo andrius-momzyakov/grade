@@ -20,7 +20,13 @@
 {% block content%}
 {% for contact in contacts %}
 <table width="100%" style="padding-bottom: 20px">
+    {% if contact.photo %}
+    <tr><th style="text-align:right; width:35%;">
+        <img style="padding-right:50px;" alt="Фото" height="120px" src="{{ contact.photo.url}}">
+    </th><th style="text-align: left;">{{ contact.name }}</th></tr>
+    {%else%}
     <caption><h2>{{ contact.name }}</h2></caption>
+    {% endif %}
 
     {% if contact.contactphone_set.all %}
     <tr><th colspan="2"><h3>Телефоны для связи</h3></th></tr>
