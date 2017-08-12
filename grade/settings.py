@@ -57,7 +57,7 @@ ROOT_URLCONF = 'grade.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['common_templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
