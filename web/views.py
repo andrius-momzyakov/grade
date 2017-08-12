@@ -53,11 +53,12 @@ class Index(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class Products(View):
+class PlainPage(View):
 
     def get(self, request, *args, **kwargs):
+        page_code = kwargs.get('code', '')
         contact_info = get_base_contact()
-        content = IndexPage.objects.get(code=settings.PRODUCTS_CODE)
+        content = get_object_or_404(IndexPage, code=page_code)
         context = {'content': content}
         context.update(contact_info)
         return render(request, 'products.html', context=context)
@@ -82,7 +83,6 @@ class ProjectListView(View):
         context = {'list': list_content}
         context.update(contact_info)
         return render(request, 'Projects.html', context=context)
-
 
 
 class ContactView(View):
