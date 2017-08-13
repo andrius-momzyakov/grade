@@ -115,6 +115,12 @@ html,body {
     padding-left: 15 px;
 }
 
+.comment_deleted_text {
+    fornt-size: 10px;
+    color: red;
+    padding-left: 15 px;
+}
+
 .gallery_lg {
     width: 100%;
     height:380px;
@@ -127,5 +133,6 @@ html,body {
     display: inline-block;
     vertical-align: middle;
     width: 220px;
-    height:360px;
+    /*height:360px;*/
+    /*background:red;*/
 }

@@ -73,6 +73,7 @@ class ProjectView(View):
         contact_info = get_base_contact()
         obj = get_object_or_404(Project, pk=id)
         context = {'project': obj}
+        context.update({'comments': ProjectComment.objects.filter(project=obj)})
         context.update(contact_info)
         return render(request, 'Project.html', context=context)
 
