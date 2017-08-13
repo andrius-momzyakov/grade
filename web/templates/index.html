@@ -5,9 +5,10 @@
 {{ content.body|safe }}
     </div>
 <hr style="margin: 10px 0 10px;">
+<h4 style="text-align: center;">Наши объекты</h4>
 <div style="clear: both;">
     {% for image in photos %}
-    <a href="{{ image.project.get_url }}"><img style="vertical-align: middle; padding:5px;" src="{{ image.get_preview_url }}"></a>
+    <a href="{{ image.project.get_url }}"><img style="vertical-align: middle; padding:5px;" src="{{ image.get_thumbnail_url }}"></a>
     {% endfor %}
 </div>
 {% endblock %}

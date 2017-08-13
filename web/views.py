@@ -1,12 +1,14 @@
 import random
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.http import HttpResponse
 from django.views.generic.edit import CreateView, UpdateView, View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project
+from django.forms import ModelForm
+from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project,\
+                    ProjectComment, ProjectCommentatorSecret
 
 # Create your views here.
 
@@ -36,7 +38,7 @@ class Index(View):
         cnt = ProjectPhoto.objects.count()
         photos = []
         rownums = []
-        limit=12
+        limit=21
         if cnt < limit:
             limit = cnt
         for i in range(limit):
@@ -93,3 +95,56 @@ class ContactView(View):
         context = {'contacts': qs}
         context.update(contact_info)
         return render(request, 'Contact.html', context=context)
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = ProjectComment
+        fields = [
+            #'project',
+            'commentator_name',
+            'text',
+            #'creation_date',
+            #'update_date',
+            #'deleted'
+            ]
+
+
+class CommentView(View):
+
+    def get(self, request, secret):
+        sec = ProjectCommentatorSecret.objects.filter(secret=secret)
+        if sec.count() < 1:
+            return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
+        project = sec[0].project
+        print(project)
+        comments = ProjectComment.objects.filter(project=project)
+        print(comments)
+        form = CommentForm(initial={'commentator_name': sec[0].commentator_name,
+                                    'project':project})
+
+        contact_info = get_base_contact()
+        context = {'form': form, 'comments':comments, 'secret': secret}
+        context.update(contact_info)
+
+        return render(request, 'Comment.html', context=context)
+
+    def post(self, request, secret):
+        sec = ProjectCommentatorSecret.objects.filter(secret=secret)
+        if sec.count() < 1:
+            return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
+        project = sec[0].project
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.project = project
+            comment.save()
+            return redirect(reverse('comment', args=[secret, ]))
+
+        comments = ProjectComment.objects.filter(project=project)
+        contact_info = get_base_contact()
+        context = {'form': form, 'comments':comments}
+        context.update(contact_info)
+        return render(request, 'Comment.html', context=context)
+

@@ -2,9 +2,9 @@
 
 {% block content%}
 {% if project.projectphoto_set.all %}
-    Показать
+    Смотреть
     <a href="#gallery-top">
-        фото
+        фотогалерею
     </a>
 {% endif %}
 <div >
@@ -16,7 +16,11 @@
     <h3 id="gallery-top" style="text-align: center;">Галерея</h3>
 {% endif %}
     {% for photo in project.projectphoto_set.all %}
-    <a href="{{ photo.image.url}}"><img style="vertical-align: middle; padding:5px;" src="{{ photo.get_preview_url }}"></a>
+        <div class="gallery_lg_image">
+    <a href="{{ photo.image.url}}">
+        <img style="vertical-align: middle; padding:5px;" src="{{ photo.get_preview_url }}">
+    </a>
+            </div>
     {% endfor %}
 </div>
 {% endblock %}

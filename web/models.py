@@ -1,6 +1,7 @@
 import os
 import urllib
 import math
+from datetime import datetime
 from PIL import Image
 from django.conf import settings
 from django.db import models
@@ -274,3 +275,38 @@ class ContactEmail(models.Model):
 
     def __str__(self):
         return self.person.name + ' -> ' + self.email
+
+
+class ProjectCommentatorSecret(models.Model):
+    project = models.ForeignKey(Project, verbose_name='Объект')
+    commentator_name = models.CharField(verbose_name='Имя (по умолчанию)', max_length=255)
+    email = models.EmailField(verbose_name='e-mail для отправки ссылки', max_length=100)
+    secret = models.CharField(verbose_name='Секретный код', max_length=20, unique=True)
+
+    class Meta:
+        verbose_name = 'Код для генерации ссылки для комментатора'
+        verbose_name_plural = 'Коды для генерации ссылки для комментатора'
+
+    def __str__(self):
+        return self.commentator_name + ' -> ' + self.email
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # TODO: отправка ссылки на почту
+
+
+class ProjectComment(models.Model):
+    project = models.ForeignKey(Project, verbose_name='Объект', null=True, blank=True)
+    commentator_name = models.CharField(verbose_name='Имя', max_length=255)
+    text = models.TextField(verbose_name='Комментарий')
+    creation_date = models.DateTimeField(default=datetime.now())
+    update_date = models.DateTimeField(default=datetime.now())
+    deleted = models.BooleanField(verbose_name='Признак удаления', default=False)
+
+    def save(self, *args, **kwargs):
+        self.update_date = datetime.now()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.commentator_name + ' -> ' + self.update_date.strftime('%d.%m.%Y %H:%M:%S')
+

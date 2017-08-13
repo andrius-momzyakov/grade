@@ -6,7 +6,7 @@ from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from .models import IndexPage, Category, Segment, Worker, Project, JobCategory, Job, ProjectPhoto, \
-                    ContactPerson, ContactPhone, ContactEmail
+                    ContactPerson, ContactPhone, ContactEmail, ProjectCommentatorSecret, ProjectComment
 
 class WysiwygAdmin(admin.ModelAdmin):
 
@@ -70,3 +70,6 @@ class ContactPersonAdmin(admin.ModelAdmin):
     inlines = [ContactPhoneAdmin, ContactEmailAdmin]
 
 admin.site.register(ContactPerson, ContactPersonAdmin)
+
+admin.site.register(ProjectCommentatorSecret)
+admin.site.register(ProjectComment)

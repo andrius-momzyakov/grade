@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content%}
+{% for comment in comments %}
+{% if comment.deleted %}
+<p>Комментарий удален.</p>
+{% else %}
+<p class="comment_header">{{ comment }}</p>
+<p class="comment_text">{{ comment.text }}</p>
+{% endif %}
+{% endfor %}
+{% if comments %}
+<hr>
+{% endif %}
+<form action="{% url 'comment' secret %}" method="post">{% csrf_token %}
+    {{ form.non_field_errors }}
+    <table>
+    {{ form.as_table }}
+        </table>
+    <input type="submit" value="Сохранить" />
+</form>
+{% endblock %}
