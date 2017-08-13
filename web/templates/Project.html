@@ -37,7 +37,8 @@
     {% if comment.deleted %}
     <p class="comment_deleted_text">Комментарий удален.</p>
     {% else %}
-    <p class="comment_header">{{ comment }}</p>
+<p class="comment_header"><b><i>{{ comment.commentator_name }}</i></b><br>&nbsp;&nbsp;Создано:&nbsp;{{ comment.creation_date}}
+    &nbsp;Последнее изменение:&nbsp;{{ comment.update_date }}</p>
     <p class="comment_text">{{ comment.text }}</p>
     {% endif %}
     {% endfor %}

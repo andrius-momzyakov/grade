@@ -114,6 +114,7 @@ class CommentForm(ModelForm):
 class CommentView(View):
 
     def get(self, request, secret):
+        print(secret)
         sec = ProjectCommentatorSecret.objects.filter(secret=secret)
         if sec.count() < 1:
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
@@ -131,6 +132,7 @@ class CommentView(View):
         return render(request, 'Comment.html', context=context)
 
     def post(self, request, secret):
+        print(secret)
         sec = ProjectCommentatorSecret.objects.filter(secret=secret)
         if sec.count() < 1:
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')

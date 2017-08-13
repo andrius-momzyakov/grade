@@ -291,6 +291,12 @@ class ProjectCommentatorSecret(models.Model):
         return self.commentator_name + ' -> ' + self.email
 
     def save(self, *args, **kwargs):
+        SYMBOLS = '1234567890_QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm'
+        import random
+        secret = ''.join([SYMBOLS[random.randint(0, 62)] for i in range(20)])
+        while ProjectCommentatorSecret.objects.filter(secret=secret):
+            secret = ''.join([SYMBOLS[random.randint(0, 62)] for i in range(20)])
+        self.secret = secret
         super().save(*args, **kwargs)
         # TODO: отправка ссылки на почту
 
