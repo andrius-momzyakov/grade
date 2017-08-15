@@ -154,16 +154,12 @@ class CommentView(View):
 class EditCommentForm(ModelForm):
     class Meta:
         model = ProjectComment
-        fields = [
+        fields = (
             'id',
-            #'project',
             'commentator_name',
             'text',
-            #'creation_date',
-            #'update_date',
-            #'deleted'
-            ]
-        widgets = {'id': HiddenInput()}
+        )
+        widgets = {'id': HiddenInput(),}
 
 
 class EditCommentView(View):
