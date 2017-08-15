@@ -174,7 +174,6 @@ class EditCommentView(View):
             return redirect(reverse('comment', kwargs={'secret': secret}))
         last_comment = instances_ordered[0]
         form = EditCommentForm(instance=last_comment)
-        form
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
         context = {'form': form, 'comments':comments, 'secret': secret}
@@ -192,9 +191,9 @@ class EditCommentView(View):
         last_comment = instances_ordered[0]
         form = EditCommentForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.id = last_comment
-            comment.save()
+            comment = form.save() #(commit=False)
+            #comment.id = last_comment
+            #comment.save()
             return redirect(reverse('project', kwargs={'id': project.id}) + '#comments_top')
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
