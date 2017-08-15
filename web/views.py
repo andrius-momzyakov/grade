@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+import django.forms as forms
 from django.forms import ModelForm, HiddenInput
 from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project,\
                     ProjectComment, ProjectCommentatorSecret
@@ -152,14 +153,13 @@ class CommentView(View):
 
 
 class EditCommentForm(ModelForm):
+    id = forms.IntegerField(widget=HiddenInput())
     class Meta:
         model = ProjectComment
         fields = (
-            'id',
             'commentator_name',
             'text',
         )
-        widgets = {'id': HiddenInput(),}
 
 
 class EditCommentView(View):
