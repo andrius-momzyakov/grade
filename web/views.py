@@ -190,7 +190,7 @@ class EditCommentView(View):
         instance = ProjectComment.objects.filter(pk=str(id))
         if instance.count() < 1:
             return redirect(reverse('comment', kwargs={'secret': secret}))
-        form = EditCommentForm(request.POST, instance=instance)
+        form = EditCommentForm(request.POST, instance=instance[0])
         if form.is_valid():
             comment = form.save() #(commit=False)
             #comment.id = last_comment
