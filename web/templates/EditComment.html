@@ -12,7 +12,7 @@
 {% if comments %}
 <hr>
 {% endif %}
-<form action="{% url 'editcomment' secret %}" method="post">{% csrf_token %}
+<form action="{% url 'editcomment' id=id secret=secret %}" method="post">{% csrf_token %}
     {{ form.non_field_errors }}
     <table>
     {{ form.as_table }}

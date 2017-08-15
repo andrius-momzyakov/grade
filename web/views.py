@@ -178,20 +178,19 @@ class EditCommentView(View):
         form = EditCommentForm(instance=last_comment)
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
-        context = {'form': form, 'comments':comments, 'secret': secret}
+        context = {'form': form, 'comments':comments, 'secret': secret, 'id': last_comment.id}
         context.update(contact_info)
         return render(request, 'EditComment.html', context=context)
 
-    def post(self, request, secret):
+    def post(self, request, id, secret):
         sec = ProjectCommentatorSecret.objects.filter(secret=secret)
         if sec.count() < 1:
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
         project = sec[0].project
-        instances_ordered = ProjectComment.objects.filter(secret=secret).order_by('-id')
-        if instances_ordered.count() < 1:
+        instance = ProjectComment.objects.filter(pk=str(id))
+        if instance.count() < 1:
             return redirect(reverse('comment', kwargs={'secret': secret}))
-        last_comment = instances_ordered[0]
-        form = EditCommentForm(request.POST)
+        form = EditCommentForm(request.POST, instance=instance)
         if form.is_valid():
             comment = form.save() #(commit=False)
             #comment.id = last_comment
@@ -199,7 +198,7 @@ class EditCommentView(View):
             return redirect(reverse('project', kwargs={'id': project.id}) + '#comments_top')
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
-        context = {'form': form, 'comments':comments, 'secret': secret}
+        context = {'form': form, 'comments':comments, 'secret': secret, 'id': id}
         context.update(contact_info)
         return render(request, 'EditComment.html', context=context)
 
