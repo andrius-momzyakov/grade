@@ -308,6 +308,7 @@ class ProjectComment(models.Model):
     creation_date = models.DateTimeField(default=datetime.now())
     update_date = models.DateTimeField(default=datetime.now())
     deleted = models.BooleanField(verbose_name='Признак удаления', default=False)
+    secret = models.CharField(max_length=20, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.update_date = datetime.now()

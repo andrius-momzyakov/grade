@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^portfolio/', views.ProjectListView.as_view(), name='project_list'),
     url('^accounts/', include('django.contrib.auth.urls')),
     url(r'^license/$', views.PlainPage.as_view(), {'code': settings.LICENSE_CODE}, name='license'),
-    url(r'^comment/(?P<secret>\w+)$', views.CommentView.as_view(), name='comment')
+    url(r'^comment/(?P<secret>\w+)$', views.CommentView.as_view(), name='comment'),
+    url(r'^comment/edit/(?P<secret>\w+)$', views.EditCommentView.as_view(), name='editcomment')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

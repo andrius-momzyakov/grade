@@ -114,7 +114,6 @@ class CommentForm(ModelForm):
 class CommentView(View):
 
     def get(self, request, secret):
-        print(secret)
         sec = ProjectCommentatorSecret.objects.filter(secret=secret)
         if sec.count() < 1:
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
@@ -132,7 +131,6 @@ class CommentView(View):
         return render(request, 'Comment.html', context=context)
 
     def post(self, request, secret):
-        print(secret)
         sec = ProjectCommentatorSecret.objects.filter(secret=secret)
         if sec.count() < 1:
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
@@ -142,8 +140,45 @@ class CommentView(View):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.project = project
+            comment.secret = secret
             comment.save()
             return redirect(reverse('comment', args=[secret, ]))
+
+        comments = ProjectComment.objects.filter(project=project)
+        contact_info = get_base_contact()
+        context = {'form': form, 'comments':comments}
+        context.update(contact_info)
+        return render(request, 'Comment.html', context=context)
+
+
+class EditCommentView(View):
+
+    def get(self, request, secret):
+        sec = ProjectCommentatorSecret.objects.filter(secret=secret)
+        if sec.count() < 1:
+            return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
+        project = sec[0].project
+        instances_ordered = ProjectComment.objects.filter(secret=secret).order_by('-id')
+        if instances_ordered.count() < 1:
+            return redirect(reverse('comment', args=[secret,]))
+        last_comment = instances_ordered[0]
+        form = CommentForm(instance=last_comment)
+        comments = ProjectComment.objects.filter(project=project)
+        contact_info = get_base_contact()
+        context = {'form': form, 'comments':comments}
+        context.update(contact_info)
+        return render(request, 'Comment.html', context=context)
+
+    def post(self, request, secret):
+        sec = ProjectCommentatorSecret.objects.filter(secret=secret)
+        if sec.count() < 1:
+            return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
+        project = sec[0].project
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save()
+            return redirect(reverse('project', args=[project.id, ]) + '#comments_top')
 
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
