@@ -182,7 +182,7 @@ class EditCommentView(View):
         contact_info = get_base_contact()
         context = {'form': form, 'comments':comments, 'secret': secret}
         context.update(contact_info)
-        return render(request, 'Comment.html', context=context)
+        return render(request, 'EditComment.html', context=context)
 
     def post(self, request, secret):
         sec = ProjectCommentatorSecret.objects.filter(secret=secret)
@@ -202,5 +202,5 @@ class EditCommentView(View):
         contact_info = get_base_contact()
         context = {'form': form, 'comments':comments, 'secret': secret}
         context.update(contact_info)
-        return render(request, 'Comment.html', context=context)
+        return render(request, 'EditComment.html', context=context)
 
