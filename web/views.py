@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.forms import ModelForm
+from django.forms import ModelForm, HiddenInput
 from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project,\
                     ProjectComment, ProjectCommentatorSecret
 
@@ -151,6 +151,21 @@ class CommentView(View):
         return render(request, 'Comment.html', context=context)
 
 
+class EditCommentForm(ModelForm):
+    class Meta:
+        model = ProjectComment
+        fields = [
+            'id',
+            #'project',
+            'commentator_name',
+            'text',
+            #'creation_date',
+            #'update_date',
+            #'deleted'
+            ]
+        widgets = {'id': HiddenInput()}
+
+
 class EditCommentView(View):
 
     def get(self, request, secret):
@@ -162,7 +177,7 @@ class EditCommentView(View):
         if instances_ordered.count() < 1:
             return redirect(reverse('comment', kwargs={'secret': secret}))
         last_comment = instances_ordered[0]
-        form = CommentForm(instance=last_comment)
+        form = EditCommentForm(instance=last_comment)
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
         context = {'form': form, 'comments':comments, 'secret': secret}
@@ -174,9 +189,14 @@ class EditCommentView(View):
         if sec.count() < 1:
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
         project = sec[0].project
-        form = CommentForm(request.POST)
+        instances_ordered = ProjectComment.objects.filter(secret=secret).order_by('-id')
+        if instances_ordered.count() < 1:
+            return redirect(reverse('comment', kwargs={'secret': secret}))
+        last_comment = instances_ordered[0]
+        form = EditCommentForm(request.POST)
         if form.is_valid():
-            comment = form.save()
+            comment = form.save(commit=False)
+            comment.id = last_comment
             return redirect(reverse('project', kwargs={'secret': project.id}) + '#comments_top')
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
