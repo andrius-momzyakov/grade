@@ -197,6 +197,7 @@ class EditCommentView(View):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.id = last_comment
+            comment.save()
             return redirect(reverse('project', kwargs={'id': project.id}) + '#comments_top')
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
