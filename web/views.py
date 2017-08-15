@@ -156,7 +156,7 @@ class EditCommentForm(ModelForm):
     id = forms.IntegerField(widget=HiddenInput())
     class Meta:
         model = ProjectComment
-        fields = (
+        fields = ('id',
             'commentator_name',
             'text',
         )
@@ -174,6 +174,7 @@ class EditCommentView(View):
             return redirect(reverse('comment', kwargs={'secret': secret}))
         last_comment = instances_ordered[0]
         form = EditCommentForm(instance=last_comment)
+        form
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
         context = {'form': form, 'comments':comments, 'secret': secret}
