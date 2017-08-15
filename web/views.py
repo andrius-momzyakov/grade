@@ -156,10 +156,12 @@ class EditCommentForm(ModelForm):
     id = forms.IntegerField(widget=HiddenInput())
     class Meta:
         model = ProjectComment
-        fields = ('id',
+        fields = ('id', 'project','secret',
             'commentator_name',
             'text',
+
         )
+        widgets = {'project': HiddenInput(), 'secret':HiddenInput()}
 
 
 class EditCommentView(View):
