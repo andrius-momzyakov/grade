@@ -153,10 +153,9 @@ class CommentView(View):
 
 
 class EditCommentForm(ModelForm):
-    id = forms.IntegerField(widget=HiddenInput())
     class Meta:
         model = ProjectComment
-        fields = ('id', 'project','secret',
+        fields = ('project','secret',
             'commentator_name',
             'text',
 
@@ -192,9 +191,7 @@ class EditCommentView(View):
             return redirect(reverse('comment', kwargs={'secret': secret}))
         form = EditCommentForm(request.POST, instance=instance[0])
         if form.is_valid():
-            comment = form.save() #(commit=False)
-            #comment.id = last_comment
-            #comment.save()
+            comment = form.save()
             return redirect(reverse('project', kwargs={'id': project.id}) + '#comments_top')
         comments = ProjectComment.objects.filter(project=project)
         contact_info = get_base_contact()
