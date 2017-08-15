@@ -159,8 +159,8 @@ class EditCommentView(View):
             return HttpResponse('Указан неверный код доступа. Получение данных невозможно.')
         project = sec[0].project
         instances_ordered = ProjectComment.objects.filter(secret=secret).order_by('-id')
-        if instances_ordered.count() < 1:
-            return redirect(reverse('comment', args=[secret,]))
+        #if instances_ordered.count() < 1:
+        #    return redirect(reverse('comment', args=[secret,]))
         last_comment = instances_ordered[0]
         form = CommentForm(instance=last_comment)
         comments = ProjectComment.objects.filter(project=project)
