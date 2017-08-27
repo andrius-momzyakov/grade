@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content%}
+{% if project.is_draft %}<p> Черновик !!! </p>{% endif %}
+{% if user.is_superuser %}
+    <a href="/admin/web/project/{{ project.id }}/change/">Изменить</a>
+{% endif %}
+
 {% if project.projectphoto_set.all %}
     <a style="padding: 5px;" href="#gallery-top">
         Фотогалерея

@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.forms import ModelForm
-from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, JobCategory, ProjectPhoto, Project,\
+from .models import IndexPage, ContactPerson, ContactPhone, ContactEmail, ProjectPhoto, Project,\
                     ProjectComment, ProjectCommentatorSecret
 
 # Create your views here.
@@ -54,35 +54,45 @@ class Index(View):
         return render(request, 'index.html', context=context)
 
 
-@method_decorator(login_required, name='dispatch')
+# @method_decorator(login_required, name='dispatch')
 class PlainPage(View):
 
     def get(self, request, *args, **kwargs):
         page_code = kwargs.get('code', '')
         contact_info = get_base_contact()
-        content = get_object_or_404(IndexPage, code=page_code)
+        if request.user.is_authenticated:
+            content = get_object_or_404(IndexPage, code=page_code)
+        else:
+            content = get_object_or_404(IndexPage, code=page_code, is_draft=False)
         context = {'content': content}
         context.update(contact_info)
         return render(request, 'products.html', context=context)
 
 
-@method_decorator(login_required, name='dispatch')
+# @method_decorator(login_required, name='dispatch')
 class ProjectView(View):
 
     def get(self, request, id, *args, **kwargs):
         contact_info = get_base_contact()
-        obj = get_object_or_404(Project, pk=id)
+        if request.user.is_authenticated:
+            obj = get_object_or_404(Project, pk=id)
+        else:
+            obj = get_object_or_404(Project, pk=id, is_draft=False)
         context = {'project': obj}
         context.update({'comments': ProjectComment.objects.filter(project=obj)})
         context.update(contact_info)
         return render(request, 'Project.html', context=context)
 
-@method_decorator(login_required, name='dispatch')
+
+# @method_decorator(login_required, name='dispatch')
 class ProjectListView(View):
 
     def get(self, request, *args, **kwargs):
         contact_info = get_base_contact()
-        list_content = Project.objects.all()
+        if request.user.is_authenticated:
+            list_content = Project.objects.all()
+        else:
+            list_content = Project.objects.filter(is_draft=False)
         context = {'list': list_content}
         context.update(contact_info)
         return render(request, 'Projects.html', context=context)

@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content%}
+{% if content.is_draft %}<p> Черновик !!! </p>{% endif %}
+{% if user.is_superuser %}
+    <a href="/admin/web/indexpage/{{ content.id }}/change/">Изменить</a>
+{% endif %}
+
 {{ content.body|safe }}
 {% endblock %}

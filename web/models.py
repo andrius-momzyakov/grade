@@ -109,9 +109,13 @@ class IndexPage(models.Model):
     code = models.CharField(max_length=100, verbose_name='Мнемокод для представления (уникальный)', unique=True)
     title = models.CharField(max_length=250, verbose_name='Заголовок', null=True, blank=True)
     body = models.TextField(verbose_name='Содержание страницы')
+    is_draft = models.BooleanField(verbose_name='Черновик', default=True)
 
     def __str__(self):
-        return self.code + ' -> ' + self.title
+        draft_flag = ''
+        if self.is_draft:
+            draft_flag = ' (Черновик)'
+        return self.code + ' -> ' + self.title + draft_flag
 
     class Meta:
         verbose_name = 'Главная страница'
@@ -129,16 +133,16 @@ class Category(models.Model):
         verbose_name_plural = 'Категории проектов'
 
 
-class Segment(models.Model):
-    name = models.CharField(max_length=250, verbose_name='Название', unique=True)
-    description = models.TextField(verbose_name='Описание', blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Сегмент рынка'
-        verbose_name_plural = 'Сегменты рынка'
+# class Segment(models.Model):
+#     name = models.CharField(max_length=250, verbose_name='Название', unique=True)
+#     description = models.TextField(verbose_name='Описание', blank=True, null=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#     class Meta:
+#         verbose_name = 'Сегмент рынка'
+#         verbose_name_plural = 'Сегменты рынка'
 
 
 class Project(models.Model):
@@ -149,13 +153,17 @@ class Project(models.Model):
                                          blank=True)
     description = models.TextField(verbose_name='Содержание страницы')
     categories = models.ManyToManyField(Category, verbose_name='Категории')
+    is_draft = models.BooleanField(verbose_name='Черновик', default=True)
 
     class Meta:
         verbose_name = 'Объект'
         verbose_name_plural = 'Объекты'
 
     def __str__(self):
-        return self.code + ' -> ' + str(self.title)
+        draft_flag = ''
+        if self.is_draft:
+            draft_flag = ' (Черновик)'
+        return self.code + ' -> ' + str(self.title) + draft_flag
 
     def get_url(self):
         return '/project/{}'.format(self.id)
@@ -190,48 +198,48 @@ class ProjectPhoto(PhotoModel):
         return self.project.code + ' -> ' + self.image.name
 
 
-class JobCategory(models.Model):
-    name = models.CharField(max_length=250, verbose_name='Название', unique=True)
-    description = models.TextField(verbose_name='Описание', blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Категория работ'
-        verbose_name_plural = 'Категории работ'
-
-    def __str__(self):
-        return self.name
-
-
-class Job(models.Model):
-    jobcategory = models.ForeignKey(JobCategory, verbose_name='Категория работ')
-    name = models.CharField(max_length=250, verbose_name='Название работы')
-    unit = models.CharField(max_length=100, verbose_name='единица измерения')
-    currency = models.CharField(max_length=10, verbose_name='Валюта (код)')
-    price = models.IntegerField(verbose_name='Цена за ед.')
-    description = models.TextField(verbose_name='Описание', blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Вид Работы'
-        verbose_name_plural = 'Виды Работ'
-        unique_together=('jobcategory', 'name')
-
-    def __str__(self):
-        return self.jobcategory + ' -> ' + self.name
+# class JobCategory(models.Model):
+#     name = models.CharField(max_length=250, verbose_name='Название', unique=True)
+#     description = models.TextField(verbose_name='Описание', blank=True, null=True)
+#
+#     class Meta:
+#         verbose_name = 'Категория работ'
+#         verbose_name_plural = 'Категории работ'
+#
+#     def __str__(self):
+#         return self.name
 
 
-class Worker(models.Model):
-    name = models.CharField(verbose_name='Имя', max_length=50)
-    surname = models.CharField(verbose_name='Фамилия', max_length=50)
-    position = models.CharField(max_length=100, verbose_name='Специальность', null=True, blank=True)
-    jobcategories = models.ManyToManyField('JobCategory', verbose_name='Услуги')
-    description = models.TextField(verbose_name='Описание', null=True, blank=True)
+# class Job(models.Model):
+#     jobcategory = models.ForeignKey(JobCategory, verbose_name='Категория работ')
+#     name = models.CharField(max_length=250, verbose_name='Название работы')
+#     unit = models.CharField(max_length=100, verbose_name='единица измерения')
+#     currency = models.CharField(max_length=10, verbose_name='Валюта (код)')
+#     price = models.IntegerField(verbose_name='Цена за ед.')
+#     description = models.TextField(verbose_name='Описание', blank=True, null=True)
+#
+#     class Meta:
+#         verbose_name = 'Вид Работы'
+#         verbose_name_plural = 'Виды Работ'
+#         unique_together=('jobcategory', 'name')
+#
+#     def __str__(self):
+#         return self.jobcategory + ' -> ' + self.name
 
-    class Meta:
-        verbose_name = 'Мастер'
-        verbose_name_plural = 'Мастера'
 
-    def __str__(self):
-        return self.name + ' ' + self.surname
+# class Worker(models.Model):
+#     name = models.CharField(verbose_name='Имя', max_length=50)
+#     surname = models.CharField(verbose_name='Фамилия', max_length=50)
+#     position = models.CharField(max_length=100, verbose_name='Специальность', null=True, blank=True)
+#     jobcategories = models.ManyToManyField('JobCategory', verbose_name='Услуги')
+#     description = models.TextField(verbose_name='Описание', null=True, blank=True)
+#
+#     class Meta:
+#         verbose_name = 'Мастер'
+#         verbose_name_plural = 'Мастера'
+#
+#     def __str__(self):
+#         return self.name + ' ' + self.surname
 
 
 class ContactPerson(models.Model):
@@ -308,6 +316,10 @@ class ProjectComment(models.Model):
     creation_date = models.DateTimeField(default=datetime.now())
     update_date = models.DateTimeField(default=datetime.now())
     deleted = models.BooleanField(verbose_name='Признак удаления', default=False)
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
 
     def save(self, *args, **kwargs):
         self.update_date = datetime.now()
