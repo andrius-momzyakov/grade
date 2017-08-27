@@ -289,7 +289,7 @@ class ProjectCommentatorSecret(models.Model):
     project = models.ForeignKey(Project, verbose_name='Объект')
     commentator_name = models.CharField(verbose_name='Имя (по умолчанию)', max_length=255)
     email = models.EmailField(verbose_name='e-mail для отправки ссылки', max_length=100)
-    secret = models.CharField(verbose_name='Секретный код', max_length=20, unique=True)
+    secret = models.CharField(verbose_name='Секретный код', max_length=20, unique=True, default='123456')
 
     class Meta:
         verbose_name = 'Код для генерации ссылки для комментатора'
