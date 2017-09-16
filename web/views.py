@@ -87,13 +87,35 @@ class ProjectView(View):
 # @method_decorator(login_required, name='dispatch')
 class ProjectListView(View):
 
+    CCOUNT = 4
+
     def get(self, request, *args, **kwargs):
         contact_info = get_base_contact()
         if request.user.is_authenticated:
             list_content = Project.objects.all()
         else:
             list_content = Project.objects.filter(is_draft=False)
-        context = {'list': list_content}
+
+        rcount = 0
+        if list_content.count() > 0:
+            rcount = round(list_content.count() / ProjectListView.CCOUNT)
+
+        obj_rows = []
+        obj_row = []
+        for item in list_content:
+            if len(obj_row) < ProjectListView.CCOUNT:
+                obj_row.append(item)
+            else:
+                obj_rows.append(obj_row)
+                obj_row = []
+
+        if obj_row:
+            if len(obj_row) < ProjectListView.CCOUNT:
+                for i in range(ProjectListView.CCOUNT - len(obj_row)):
+                    obj_row.append(None)
+        obj_rows.append(obj_row)
+
+        context = {'list': obj_rows}
         context.update(contact_info)
         return render(request, 'Projects.html', context=context)
 

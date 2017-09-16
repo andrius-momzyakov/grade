@@ -4,12 +4,22 @@
 {% if not list %}
 <h4>Доступной информации не найдено.</h4>
 {% endif %}
-{% for obj in list %}
-<div class = "object_list_item">
-    <a href="/project/{{ obj.id }}"><h1>{{ obj.title }}</h1></a>
-    <a href="/project/{{ obj.id }}"><img style="vertical-align: middle; padding:5px;" src="{{ obj.get_preview_url }}"></a>
-    <p>{{ obj.short_description|safe }}
-</div>
-{% endfor %}
+{% if list %}
+    <table>
+    {% for obj_row in list %}
+        <tr>
+        {% for obj in obj_row %}
+            <td>
+            <div class = "object_list_item">
+                <a href="/project/{{ obj.id }}"><h1>{{ obj.title }}</h1></a>
+                <a href="/project/{{ obj.id }}"><img style="vertical-align: middle; padding:5px;" src="{{ obj.get_preview_url }}"></a>
+                <p>{{ obj.short_description|safe }}
+            </div>
+            </td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
 
+{% endif %}
 {% endblock %}
